@@ -1,0 +1,21 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ 2.6, truffleruby, truffleruby-head ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Build and test with Rake
+      run: |
+        sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
+        bundle install
+        bundle exec rspec spec
