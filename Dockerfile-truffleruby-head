@@ -1,0 +1,53 @@
+FROM ubuntu:18.04
+
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
+    RAILS_LOG_TO_STDOUT=true \
+    RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
+    BUNDLE_SILENCE_ROOT_WARNING=1 
+
+RUN apt-get update
+
+RUN apt-get install -y locales
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+
+RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
+
+#RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/graalvm-ce-java8-linux-amd64-20.1.0-dev.tar.gz | tar xz
+#RUN ls -l
+
+RUN curl -L https://github.com/ruby/truffleruby-dev-builder/releases/latest/download/truffleruby-head-ubuntu-18.04.tar.gz | tar xz
+ENV PATH="/truffleruby-head/lib/llvm-toolchain/bin:/truffleruby-head/bin:$PATH"
+RUN "/truffleruby-head/lib/truffle/post_install_hook.sh"
+RUN which ruby
+RUN ruby --version
+
+RUN mkdir /app
+WORKDIR /app
+
+#ENV PATH=/graalvm-ce-java8-20.1.0-dev/jre/languages/js/bin:$PATH
+RUN apt-get install -y nodejs npm
+RUN npm install yarn -g
+COPY package.json yarn.lock ./
+RUN yarn install && yarn cache clean
+
+COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle install --without development
+
+COPY . .
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+
+RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
+
+# Create symlinks for CSS files without digest hashes for use in error pages
+RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+EXPOSE 3000
+
+#ENTRYPOINT ["bundle", "exec"]
+ENTRYPOINT ["ruby", "--experimental-options", "--vm.XX:+PrintGCSummary", "--engine.Mode=latency", "--vm.Xmn1g", "--vm.Xmx2g", "-S", "bundle", "exec"]
+CMD ["rails", "server"]
