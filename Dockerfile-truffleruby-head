@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -18,7 +18,9 @@ RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-de
 #RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/graalvm-ce-java8-linux-amd64-20.1.0-dev.tar.gz | tar xz
 #RUN ls -l
 
-RUN curl -L https://github.com/ruby/truffleruby-dev-builder/releases/latest/download/truffleruby-head-ubuntu-18.04.tar.gz | tar xz
+RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/truffleruby-20.1.0-dev-linux-amd64.tar.gz | tar xz
+RUN ls -l
+#RUN curl -L https://github.com/ruby/truffleruby-dev-builder/releases/latest/download/truffleruby-head-ubuntu-18.04.tar.gz | tar xz
 ENV PATH="/truffleruby-head/lib/llvm-toolchain/bin:/truffleruby-head/bin:$PATH"
 RUN "/truffleruby-head/lib/truffle/post_install_hook.sh"
 RUN which ruby
