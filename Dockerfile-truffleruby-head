@@ -13,7 +13,7 @@ RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 
-RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql postgresql-contrib git
+RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
 
 #RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/graalvm-ce-java8-linux-amd64-20.1.0-dev.tar.gz | tar xz
 #RUN ls -l
