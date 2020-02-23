@@ -5,7 +5,8 @@ ENV RAILS_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
-    BUNDLE_SILENCE_ROOT_WARNING=1 
+    BUNDLE_SILENCE_ROOT_WARNING=1 \
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native 
 
 RUN apt-get update
 
@@ -47,6 +48,8 @@ COPY .ruby-version Gemfile Gemfile.lock ./
 RUN bundle install --without development
 
 COPY . .
+
+RUN rails routes SKIP_REDIS=true
 
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
