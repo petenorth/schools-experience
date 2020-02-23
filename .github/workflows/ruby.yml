@@ -7,15 +7,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ 2.6, truffleruby, truffleruby-head ]
+        ruby: [ 2.6 ]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
     - name: Build and test with Rake
       run: |
-        sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
-        bundle install
-        bundle exec rspec spec
+        docker build -f Dockerfile -t school-experience:latest .
+        docker-compose up -d
+        WAIT_COUNT=0
+        until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 12 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+        docker-compose run --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+
