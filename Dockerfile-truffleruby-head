@@ -21,7 +21,7 @@ RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-de
 RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/truffleruby-20.1.0-dev-linux-amd64.tar.gz | tar xz
 RUN ls -l
 #RUN curl -L https://github.com/ruby/truffleruby-dev-builder/releases/latest/download/truffleruby-head-ubuntu-18.04.tar.gz | tar xz
-ENV PATH="/truffleruby-20.1.0-dev-linux-amd64/lib/llvm-toolchain/bin:/truffleruby-head/bin:$PATH"
+ENV PATH="/truffleruby-20.1.0-dev-linux-amd64/lib/llvm-toolchain/bin:/truffleruby-20.1.0-dev-linux-amd64/bin:$PATH"
 RUN "/truffleruby-20.1.0-dev-linux-amd64/lib/truffle/post_install_hook.sh"
 RUN which ruby
 RUN ruby --version
