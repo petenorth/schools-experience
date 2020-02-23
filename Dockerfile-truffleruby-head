@@ -15,6 +15,9 @@ ENV LANG=en_US.UTF-8
 
 RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
 
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+
 #RUN curl -L https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/20.1.0-dev-20200212_0349/graalvm-ce-java8-linux-amd64-20.1.0-dev.tar.gz | tar xz
 #RUN ls -l
 
@@ -47,9 +50,6 @@ COPY .ruby-version Gemfile Gemfile.lock ./
 RUN bundle install --without development
 
 COPY . .
-
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y tzdata
 
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
