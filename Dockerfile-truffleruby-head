@@ -48,8 +48,8 @@ RUN bundle install --without development
 
 COPY . .
 
-#ENV DEBIAN_FRONTEND=noninteractive
-#RUN apt-get install -y tzdata
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
 
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
