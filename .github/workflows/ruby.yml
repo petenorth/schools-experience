@@ -10,6 +10,7 @@ jobs:
         ruby: [ 2.6 ]
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Build and test with Rake
       run: |
         docker build -f Dockerfile -t school-experience:latest .
