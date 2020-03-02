@@ -264,7 +264,8 @@ module Schools
       end
 
       def description_for_fee(fee)
-        puts 'prior to calling number_to_currency ' + fee.amount_pounds
+        puts 'prior to calling number_to_currency '
+        puts fee.amount_pounds
         amount = number_to_currency fee.amount_pounds, unit: '£', raise: true
         name = fee.model_name.human.downcase
         interval = fee.interval.downcase
