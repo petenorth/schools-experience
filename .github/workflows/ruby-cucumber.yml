@@ -21,6 +21,9 @@ jobs:
     - name: run specs
       if: matrix.ruby == 'truffleruby-head'
       run: |
+        export RUBYOPT_SCHOOL_EXPERIENCE='--experimental-options --engine.Mode=latency'
+        export RUBYOPT_DELAYED_JOBS=$RUBYOPT_SCHOOL_EXPERIENCE
+        export RUBYOPT_DB_TASKS='--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary'
         docker-compose -f docker-compose.yml \
                        -f docker-compose-chrome.yml run --rm \
                        -e RAILS_ENV=test \
