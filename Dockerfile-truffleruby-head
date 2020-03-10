@@ -58,6 +58,7 @@ RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_RE
 
 EXPOSE 3000
 
+ENV RUBYOPT=
 ENTRYPOINT ["bundle", "exec"]
 #ENTRYPOINT ["ruby", "--experimental-options", "--vm.XX:+PrintGCSummary", "--engine.Mode=latency", "--vm.Xmn1g", "--vm.Xmx2g", "-S", "bundle", "exec"]
 CMD ["rails", "server"]
