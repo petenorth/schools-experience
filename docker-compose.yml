@@ -15,6 +15,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
+       - RUBYOPT='--experimental-options --engine.Mode=latency'
      depends_on:
        - db-tasks
      volumes:
@@ -33,6 +34,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
+       - RUBYOPT='--experimental-options --engine.Mode=latency'
      depends_on:
        - db-tasks
 
@@ -49,6 +51,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
+       - RUBYOPT='--experimental-options --vm.XX:+PrintGCSummary --engine.Mode=latency'
      volumes:
        - .:/ci_build
      depends_on:
