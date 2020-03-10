@@ -22,7 +22,7 @@ jobs:
         RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER='--experimental-options --engine.Mode=latency'
+        RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency
         EOL
     - name: spin up
       run : |
@@ -33,7 +33,7 @@ jobs:
     - name: run specs for truffleruby
       run: |
         [[ -e cucumber.env ]] && source cucumber.env
-        echo "RUBYOPT_DB_TASK=$RUBYOPT_CUCUMBER"
+        echo "RUBYOPT_CUCUMBER=${RUBYOPT_CUCUMBER}"
         docker-compose -f docker-compose.yml \
                        -f docker-compose-chrome.yml run --rm \
                        -e RAILS_ENV=test \
@@ -41,5 +41,5 @@ jobs:
                        -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true \
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
-                       -e RUBYOPT=$RUBYOPT_CUCUMBER \
+                       -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
                        --no-deps school-experience cucumber
