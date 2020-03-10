@@ -51,13 +51,13 @@ COPY . .
 
 RUN rails routes SKIP_REDIS=true
 
+ENV LANG=
+RUN locale
+
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
 # Create symlinks for CSS files without digest hashes for use in error pages
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
-
-ENV LANG=
-RUN locale
 
 EXPOSE 3000
 
