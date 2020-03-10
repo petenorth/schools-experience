@@ -15,7 +15,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
-       - RUBYOPT=${RUBYOPT_SCHOOL_EXPERIENCE}
+       - RUBYOPT=${RUBYOPT_SCHOOL_EXPERIENCE:-}
      depends_on:
        - db-tasks
      volumes:
@@ -34,7 +34,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
-       - RUBYOPT=${RUBYOPT_DELAYED_JOBS}
+       - RUBYOPT=${RUBYOPT_DELAYED_JOBS:-}
      depends_on:
        - db-tasks
 
@@ -51,7 +51,7 @@ services:
        - SECRET_KEY_BASE=stubbed
        - SKIP_FORCE_SSL=true
        - WEB_URL=postgis://postgres:secret@postgres/school_experience
-       - RUBYOPT=${RUBYOPT_DB_TASKS}
+       - RUBYOPT=${RUBYOPT_DB_TASKS:-}
      volumes:
        - .:/ci_build
      depends_on:
