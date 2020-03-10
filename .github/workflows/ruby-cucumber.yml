@@ -30,7 +30,7 @@ jobs:
         until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 48 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
     - name: run specs for truffleruby
       run: |
-        source .env
+        [[ -e .env ]] && source .env
         echo "RUBYOPT_DB_TASK=$RUBYOPT_CUCUMBER"
         docker-compose -f docker-compose.yml \
                        -f docker-compose-chrome.yml run --rm \
