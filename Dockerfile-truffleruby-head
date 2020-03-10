@@ -57,6 +57,7 @@ RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production 
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 ENV LANG=
+ENV locale
 
 EXPOSE 3000
 
