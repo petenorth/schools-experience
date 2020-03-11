@@ -42,4 +42,4 @@ jobs:
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
-                       --no-deps school-experience cucumber
+                       --no-deps school-experience cucumber features/schools/confirmed_bookings/show.feature:45
