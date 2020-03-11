@@ -11,8 +11,9 @@ ENV RAILS_ENV=production \
 RUN apt-get update
 
 RUN apt-get install -y locales
-RUN locale-gen C.UTF-8
+RUN locale -a
 ENV LANG=C.UTF-8
+RUN locale
 
 RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
 
