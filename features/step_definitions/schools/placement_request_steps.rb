@@ -121,6 +121,7 @@ Then("I should see a {string} section with the following values:") do |heading, 
         end
       else
         puts row['value']
+        puts page
         expect(page).to have_css('dd', text: /#{row['Value']}/i)
       end
     end
