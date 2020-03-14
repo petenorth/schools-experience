@@ -28,7 +28,7 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run: |
         docker-compose run \
-              -e RUBYOPT='--experimental-options --cpusampler --cpusampler.OutputFile=sampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
+              -e RUBYOPT='--experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/sampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         ls -l sampling.json
