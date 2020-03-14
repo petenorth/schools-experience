@@ -36,7 +36,7 @@ jobs:
               -e RUBYOPT='--experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
-        flame-graph/flamegraph.pl cpusampling.json > cpusampling.svg
+        flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
     - uses: actions/upload-artifact@v1
       if: matrix.ruby == 'truffleruby-head'
       with:
