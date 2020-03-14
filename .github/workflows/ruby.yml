@@ -36,8 +36,11 @@ jobs:
               -e RUBYOPT='--experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
-        ls -l cpusampling.json
-        rm cpusampling.json
         flame-graph/flamegraph.pl cpusampling.json > cpusampling.svg
+    - uses: actions/upload-artifact@v1
+      if: matrix.ruby == 'truffleruby-head'
+      with:
+        name: cpusampling.svg
+        path: ./cpusampling.svg
     - name: run specs
       run: docker-compose run --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
