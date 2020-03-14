@@ -28,7 +28,7 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run: |
         docker-compose run \
-              -e RUBYOPT='--cpusampler --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=calltree' \
+              -e RUBYOPT='--experimental-options --cpusampler --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=calltree' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
     - name: run specs
