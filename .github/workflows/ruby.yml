@@ -32,5 +32,6 @@ jobs:
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         ls -l sampling.json
+        rm sampling.json
     - name: run specs
       run: docker-compose run --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
