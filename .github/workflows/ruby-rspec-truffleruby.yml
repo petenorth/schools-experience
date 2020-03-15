@@ -47,4 +47,4 @@ jobs:
         name: cpusampling.svg
         path: ./cpusampling.svg
     - name: run specs
-      run: docker-compose run -e RUBYOPT=--enging.Mode='${{matrix.mode}}' --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+      run: docker-compose run -e RUBYOPT='--engine.Mode=${{matrix.mode}}' --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
