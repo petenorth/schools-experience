@@ -27,6 +27,7 @@ jobs:
     - name: Checkout tools repo
       uses: actions/checkout@v2
       with:
+        ref: graalvm
         repository: eregon/FlameGraph
         path: flame-graph
     - name: run a spec with profiling
