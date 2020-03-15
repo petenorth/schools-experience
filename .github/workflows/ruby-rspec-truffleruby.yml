@@ -44,7 +44,7 @@ jobs:
         flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
     - uses: actions/upload-artifact@v1
       with:
-        name: cpusampling.svg
+        name: cpusampling-${{matrix.mode}}.svg
         path: ./cpusampling.svg
     - name: run specs
       run: docker-compose run -e RUBYOPT='--engine.Mode=${{matrix.mode}}' --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
