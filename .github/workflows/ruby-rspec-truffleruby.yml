@@ -13,7 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [ latency, throughput ]
+        rspecmode: [ latency, throughput ]
+        appmode: [ latency, throughput ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,9 +23,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=${{matrix.mode}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=${{matrix.mode}}
-        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=${{matrix.mode}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=${{matrix.appmode}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=${{matrix.appmode}}
+        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=${{matrix.appmode}}
         EOL
         docker-compose up -d
         WAIT_COUNT=0
@@ -38,13 +39,13 @@ jobs:
     - name: run a spec with profiling
       run: |
         docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.mode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
     - uses: actions/upload-artifact@v1
       with:
-        name: cpusampling-${{matrix.mode}}.svg
+        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.svg
         path: ./cpusampling.svg
     - name: run specs
-      run: docker-compose run -e RUBYOPT='--engine.Mode=${{matrix.mode}}' --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+      run: docker-compose run -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}}' --no-deps --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
