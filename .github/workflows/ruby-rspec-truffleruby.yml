@@ -36,7 +36,6 @@ jobs:
         repository: eregon/FlameGraph
         path: flame-graph
     - name: run a spec with profiling
-      if: matrix.ruby == 'truffleruby-head'
       run: |
         docker-compose run \
               -e RUBYOPT='--engine.Mode=${{matrix.mode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal --cpusampler.Mode=roots --cpusampler.Output=json' \
@@ -44,7 +43,6 @@ jobs:
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
     - uses: actions/upload-artifact@v1
-      if: matrix.ruby == 'truffleruby-head'
       with:
         name: cpusampling.svg
         path: ./cpusampling.svg
