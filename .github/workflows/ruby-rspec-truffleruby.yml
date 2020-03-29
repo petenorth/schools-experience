@@ -39,7 +39,7 @@ jobs:
     - name: run a spec profiling require
       run: |
         docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --metrics-profile-require=true' \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --metrics-profile-require=DETAIL' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
     - name: run a spec with profiling (flame graph)
