@@ -73,6 +73,7 @@ jobs:
            --no-deps \
            --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
     - name: run a spec with profiling (histogram)
+      continue-on-error: true
       run: |
         docker-compose run \
               -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.Period=1000 --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
