@@ -75,7 +75,7 @@ jobs:
     - name: run a spec with profiling (histogram)
       run: |
         docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.Period=1000 --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
               --no-deps \
               --rm db-tasks rspec
     - uses: actions/upload-artifact@v1
