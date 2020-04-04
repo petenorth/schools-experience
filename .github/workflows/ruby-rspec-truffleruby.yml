@@ -81,5 +81,5 @@ jobs:
               --rm db-tasks rspec
     - uses: actions/upload-artifact@v1
       with:
-        name: fullrun-cpusampling.txt 
+        name: fullrun-cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt 
         path: ./fullrun-cpusampling.txt  
