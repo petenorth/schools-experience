@@ -58,14 +58,15 @@ jobs:
     - name: run a spec with profiling (histogram)
       run: |
         docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.txt§ --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
     - uses: actions/upload-artifact@v1
       with:
-        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.histogram
-        path: ./cpusampling.histogram
+        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt
+        path: ./cpusampling.txt
     - name: run specs
+      continue-on-error: true
       run: docker-compose run \
            -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}}' \
            --no-deps \
@@ -75,3 +76,7 @@ jobs:
            -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
            --no-deps \
            --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+    - uses: actions/upload-artifact@v1
+      with:
+        name: fullrun-cpusampling.txt 
+        path: ./fullrun-cpusampling.txt  
