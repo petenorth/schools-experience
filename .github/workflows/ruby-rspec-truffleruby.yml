@@ -67,15 +67,17 @@ jobs:
         path: ./cpusampling.txt
     - name: run specs
       continue-on-error: true
-      run: docker-compose run \
+      run: |
+        docker-compose run \
            -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}}' \
            --no-deps \
            --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
-    - name: run specs (histogram cpu profile)
-      run: docker-compose run \
-           -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
-           --no-deps \
-           --rm db-tasks rspec --format progress --format RspecJunitFormatter --out /ci_build/rspec_results.xml
+    - name: run a spec with profiling (histogram)
+      run: |
+        docker-compose run \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
+              --no-deps \
+              --rm db-tasks rspec
     - uses: actions/upload-artifact@v1
       with:
         name: fullrun-cpusampling.txt 
