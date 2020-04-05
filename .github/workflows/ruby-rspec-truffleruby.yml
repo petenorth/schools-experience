@@ -69,7 +69,7 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}}' \
+           -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --engine.TruffleInliningMaxCallerSize=50' \
            --no-deps \
            --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb
     - name: run a spec with profiling (histogram)
