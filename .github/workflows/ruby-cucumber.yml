@@ -43,3 +43,4 @@ jobs:
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
                        --no-deps school-experience cucumber
+        echo 'completed cucumber tests'
