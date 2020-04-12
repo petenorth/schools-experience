@@ -1,6 +1,6 @@
 Given("I am on a/the {string} page") do |string|
-  puts "Threads in run   state " + Thread.list.select {|thread| thread.status == "run"}.count
-  puts "Threads in sleep state " + Thread.list.select {|thread| thread.status == "sleep"}.count
+  puts "Threads in run   state #{Thread.list.select {|thread| thread.status == "run"}.count}"
+  puts "Threads in sleep state #{Thread.list.select {|thread| thread.status == "sleep"}.count}"
   path_for(string).tap do |p|
     visit(p)
     expect(page.current_path).to eql(p)
