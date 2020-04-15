@@ -40,7 +40,7 @@ jobs:
       run: |
         ls -l 
         docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --metrics-profile-require=DETAIL' \
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --metrics-profile-require=summary' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb 
         ls -l
