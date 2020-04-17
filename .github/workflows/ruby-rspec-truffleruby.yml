@@ -36,14 +36,6 @@ jobs:
         ref: graalvm
         repository: eregon/FlameGraph
         path: flame-graph
-    - name: run a spec profiling require
-      run: |
-        ls -l 
-        docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --metrics-profile-require=summary' \
-              --no-deps \
-              --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb 
-        ls -l
     - name: run a spec with profiling (flame graph)
       run: |
         docker-compose run \
