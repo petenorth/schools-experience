@@ -22,7 +22,7 @@ jobs:
         RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency\ --engine.TraceCompilation\ --engine.TraceTransferToInterpreter
+        RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency
         EOL
     - name: spin up
       run : |
