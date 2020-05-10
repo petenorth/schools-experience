@@ -63,8 +63,4 @@ jobs:
         docker-compose run \
            -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}}' \
            --no-deps \
-           --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb
-    - uses: actions/upload-artifact@v1
-      with:
-        name: fullrun-cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt 
-        path: ./fullrun-cpusampling.txt  
+           --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb  
