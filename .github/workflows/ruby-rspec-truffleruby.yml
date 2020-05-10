@@ -64,13 +64,6 @@ jobs:
            -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}}' \
            --no-deps \
            --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb
-    - name: run a spec with profiling (histogram)
-      continue-on-error: true
-      run: |
-        docker-compose run \
-              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.Period=200 --cpusampler.OutputFile=/ci_build/fullrun-cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
-              --no-deps \
-              --rm db-tasks rspec
     - uses: actions/upload-artifact@v1
       with:
         name: fullrun-cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt 
