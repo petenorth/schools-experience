@@ -23,9 +23,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=${{matrix.appmode}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=${{matrix.appmode}}
-        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=${{matrix.appmode}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=${{matrix.appmode}} --engine.LanguageAgnosticInlining=false
+        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=${{matrix.appmode}} --engine.LanguageAgnosticInlining=false
+        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=${{matrix.appmode}} --engine.LanguageAgnosticInlining=false
         EOL
         docker-compose up -d
         WAIT_COUNT=0
@@ -61,6 +61,6 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}}' \
+           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}} --engine.LanguageAgnosticInlining=false' \
            --no-deps \
            --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb  
