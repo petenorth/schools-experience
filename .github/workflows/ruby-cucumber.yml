@@ -17,12 +17,12 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=latency
-        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=latency
-        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=latency --engine.LanguageAgnosticInlining=false
+        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=latency --engine.LanguageAgnosticInlining=false
+        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --engine.LanguageAgnosticInlining=false --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency
+        RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency\ --engine.LanguageAgnosticInlining=false
         EOL
     - name: spin up
       run : |
