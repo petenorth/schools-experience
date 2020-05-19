@@ -62,6 +62,6 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}} --engine.LanguageAgnosticInlining={{languageagnosticinlining}}' \
+           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}} --engine.LanguageAgnosticInlining={{matrix.languageagnosticinlining}}' \
            --no-deps \
            --rm db-tasks rspec --exclude-pattern **/presenters/schools/on_boarding/school_profile_presenter_spec.rb  
