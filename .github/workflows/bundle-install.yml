@@ -1,4 +1,4 @@
-name: Smoke test rails server
+name: bundle install using setup-ruby action
 
 on:
   push
@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ 2.6, truffleruby, truffleruby-head ]
+        ruby: [ 2.6, truffleruby-head ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
