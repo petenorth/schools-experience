@@ -2,6 +2,7 @@ version: '3.3'
 
 services:
    school-experience:
+     container_name: school-experience
      image: school-experience:latest
      ports:
        - "3000:3000"
