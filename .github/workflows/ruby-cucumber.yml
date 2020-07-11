@@ -43,5 +43,8 @@ jobs:
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
-                       --no-deps school-experience cucumber
+                      --name cucumber \
+                       --no-deps school-experience cucumber | \
+                       sed -e "s/^/$(docker stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t" --no-stream school-experience)/" | \
+                       sed -e "s/^/$(docker stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t" --no-stream cucumber)/"   
         echo 'completed cucumber tests'
