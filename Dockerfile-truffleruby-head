@@ -51,8 +51,6 @@ RUN bundle install --without development
 
 COPY . .
 
-RUN rails routes SKIP_REDIS=true
-
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
 # Create symlinks for CSS files without digest hashes for use in error pages
@@ -61,6 +59,6 @@ RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_RE
 EXPOSE 3000
 
 ENV RUBYOPT=
-ENTRYPOINT ["bundle", "exec"]
-#ENTRYPOINT ["ruby", "--experimental-options", "--vm.XX:+PrintGCSummary", "--engine.Mode=latency", "--vm.Xmn1g", "--vm.Xmx2g", "-S", "bundle", "exec"]
+#ENTRYPOINT ["bundle", "exec"]
+ENTRYPOINT ["ruby", "--vm.Xmn1g", "--vm.Xmx2g", "-S", "bundle", "exec"]
 CMD ["rails", "server"]
