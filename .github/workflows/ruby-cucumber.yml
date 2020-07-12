@@ -30,6 +30,20 @@ jobs:
         docker-compose -f docker-compose.yml -f docker-compose-chrome.yml up -d
         WAIT_COUNT=0
         until docker-compose ps | grep -m 1 "db-tasks" | grep -m 1 "Exit 0" || [ $WAIT_COUNT -eq 48 ]; do echo "WAIT COUNT $(( WAIT_COUNT++ ))" && sleep 5 ; done
+    - name: run onboarding specs with memtracer option
+      run: |
+        docker stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t" | grep school-experience &
+        [[ -e cucumber.env ]] && source cucumber.env
+        echo "RUBYOPT_CUCUMBER=${RUBYOPT_CUCUMBER}"
+        docker-compose -f docker-compose.yml \
+                       -f docker-compose-chrome.yml run --rm \
+                       -e RAILS_ENV=test \
+                       -e SELENIUM_HUB_HOSTNAME=selenium-chrome \
+                       -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true \
+                       -e APP_URL=http://school-experience:3000 \
+                       -e CUC_DRIVER=chrome \
+                       -e RUBYOPT="${RUBYOPT_CUCUMBER}\ --memtracer" \
+                       --no-deps school-experience cucumber features/schools/onboarding
     - name: run specs for truffleruby
       run: |
         docker stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t" | grep school-experience &
