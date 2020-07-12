@@ -42,7 +42,7 @@ jobs:
                        -e DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true \
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
-                       -e RUBYOPT="${RUBYOPT_CUCUMBER}\ --memtracer" \
+                       -e RUBYOPT="${RUBYOPT_CUCUMBER} --memtracer" \
                        --no-deps school-experience cucumber features/schools/onboarding
     - name: run specs for truffleruby
       run: |
