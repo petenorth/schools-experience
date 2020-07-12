@@ -43,7 +43,7 @@ jobs:
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER} --memtracer" \
-                       --no-deps school-experience cucumber features/schools/onboarding
+                       --no-deps school-experience cucumber features/schools/placement_dates/secondary_school_configuration.feature
     - name: run specs for truffleruby
       run: |
         docker stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t" | grep school-experience &
