@@ -17,9 +17,9 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=latency
-        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=latency
-        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=latency --engine.CompilerThreads=-1
+        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=latency --engine.CompilerThreads=-1
+        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency --vm.XX:+PrintGCSummary --engine.CompilerThreads=-1
         EOL
         cat > cucumber.env << EOL
         RUBYOPT_CUCUMBER=--experimental-options\ --engine.Mode=latency\ --engine.CompilerThreads=-1
