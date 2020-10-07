@@ -17,4 +17,3 @@ jobs:
     - run: sudo apt-get update
     - run: sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
     - run: bundler install
-    - run: RUBYOPT='--experimental-options --engine.Mode=latency' SKIP_REDIS=true bundle exec cucumber
