@@ -51,7 +51,7 @@ RUN bundle install --without development
 
 COPY . .
 
-ENV RUBYOPT='--engine.CompilerThreads=0'
+ENV RUBYOPT='--experimental-options --engine.CompilerThreads=0'
 
 RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
 
