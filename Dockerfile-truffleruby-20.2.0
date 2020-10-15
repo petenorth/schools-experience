@@ -1,0 +1,61 @@
+FROM ubuntu:18.04
+
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
+    RAILS_LOG_TO_STDOUT=true \
+    RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
+    BUNDLE_SILENCE_ROOT_WARNING=1 \
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native 
+
+RUN apt-get update
+
+RUN apt-get install -y locales
+RUN locale -a
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN locale
+
+RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+
+RUN curl -L https://github.com/oracle/truffleruby/releases/download/vm-20.2.0/truffleruby-20.2.0-linux-amd64.tar.gz | tar xz
+ENV PATH="/truffleruby-20.2.0-linux-amd64/lib/llvm-toolchain/bin:/truffleruby-20.2.0-linux-amd64/bin:$PATH"
+RUN "/truffleruby-20.2.0-linux-amd64/lib/truffle/post_install_hook.sh"
+RUN which ruby
+RUN ruby --version
+
+RUN mkdir /app
+WORKDIR /app
+
+# Install node, leaving as few artifacts as possible
+RUN apt-get update && apt-get install apt-transport-https && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get update && \
+    apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
+
+# install NPM packages removign artifacts
+COPY package.json yarn.lock ./
+RUN yarn install && yarn cache clean
+
+COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle install --without development
+
+COPY . .
+
+RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true  
+
+# Create symlinks for CSS files without digest hashes for use in error pages
+RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+EXPOSE 3000
+
+ENTRYPOINT ["bundle", "exec"]
+#ENTRYPOINT ["ruby", "--vm.Xmn1g", "--vm.Xmx2g", "-S", "bundle", "exec"]
+CMD ["rails", "server"]
