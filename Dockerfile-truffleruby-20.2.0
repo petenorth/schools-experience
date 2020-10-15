@@ -44,7 +44,7 @@ RUN apt-get update && apt-get install apt-transport-https && \
 COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean
 
-COPY .ruby-version Gemfile Gemfile.lock ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install --without development
 
 COPY . .
