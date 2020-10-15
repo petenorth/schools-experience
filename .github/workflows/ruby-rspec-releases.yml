@@ -1,4 +1,4 @@
-name: rspec with truffleruby
+name: rspec with truffleruby releases
  
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       matrix:
         rspecmode: [ latency ]
         appmode: [ latency ]
-        release: [ 20.0.0. 20.1.0. 20.2.0 ]
+        release: [ 20.0.0, 20.1.0, 20.2.0 ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
