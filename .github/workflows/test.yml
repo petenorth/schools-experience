@@ -1,4 +1,4 @@
-name: gsub-test
+name: outside docker
  
 on: [push]
 
@@ -16,4 +16,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
     - run: sudo apt-get update
     - run: sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
-    - run: bundler install
+    - run: bundle install
+    - run: bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+    - run: bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
