@@ -18,7 +18,7 @@ jobs:
     - run: sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
     - run: bundle install
     - run: |
-        apt-get update && apt-get install apt-transport-https && \
+        sudo apt-get update && apt-get install apt-transport-https && \
          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
          echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
          curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
