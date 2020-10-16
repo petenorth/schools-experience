@@ -17,6 +17,15 @@ jobs:
     - run: sudo apt-get update
     - run: sudo apt-get install libsqlite3-dev libxml2-dev libxslt-dev
     - run: bundle install
+    - run: |
+        apt-get update && apt-get install apt-transport-https && \
+         curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+         echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+         curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+         apt-get update && \
+         apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
+         apt-get clean && \
+         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
     - run: yarn install && yarn cache clean
     - run: bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true
     - run: bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
