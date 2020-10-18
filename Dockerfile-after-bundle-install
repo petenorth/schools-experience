@@ -10,4 +10,3 @@ RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production 
 RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
 
 EXPOSE 3000
-"Dockerfile-truffleruby-head" 65L, 2340C
