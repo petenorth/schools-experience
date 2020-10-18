@@ -1,0 +1,13 @@
+FROM after-bundle-install:latest
+
+COPY . .
+
+#ENV TRUFFLERUBYOPT='--experimental-options --engine.CompilerThreads=0'
+
+RUN bundle exec rake assets:precompile RAILS_ENV=production NODE_ENV=production SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+# Create symlinks for CSS files without digest hashes for use in error pages
+RUN bundle exec rake assets:symlink_non_digested SECRET_KEY_BASE=stubbed SKIP_REDIS=true
+
+EXPOSE 3000
+"Dockerfile-truffleruby-head" 65L, 2340C

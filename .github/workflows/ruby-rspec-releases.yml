@@ -20,7 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: build docker image
-      run: docker build -f Dockerfile-truffleruby-${{matrix.release}} -t school-experience:latest .
+      run: docker build -f Dockerfile-truffleruby-${{matrix.release}} -t after-bundle-install:latest .
+    - run: docker build -f Dockerfile-after-bundle-install -t school-experience:latest .
     - name: spin up
       run : |
         cat > .env << EOL
