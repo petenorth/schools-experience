@@ -1,4 +1,4 @@
-name: rspec with truffleruby releases
+name: rspec comparing releases
  
 on:
   push:
