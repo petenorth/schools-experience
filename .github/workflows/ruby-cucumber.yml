@@ -12,7 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: build docker image
-      run: docker build -f Dockerfile-${{matrix.ruby}} -t school-experience:latest .
+      run: docker build -f Dockerfile-${{matrix.ruby}} -t after-bundle-install:latest .
+    - run: docker build -f Dockerfile-after-bundle-install -t after-assets-precompile:latest .
+    - run: docker build -f Dockerfile-after-assets-precompile -t school-experience:latest .
     - name: set RUBYOPT for truffleruby
       if: matrix.ruby == 'truffleruby-head'
       run : |
