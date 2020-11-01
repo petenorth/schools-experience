@@ -39,4 +39,11 @@ jobs:
         docker-compose run \
            -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}} --engine.LanguageAgnosticInlining=${{matrix.languageagnosticinlining}}' \
            --no-deps \
+           --rm db-tasks rspec
+    - name: run specs (multitier)
+      continue-on-error: true
+      run: |
+        docker-compose run \
+           -e RUBYOPT='--experimental-options --engine.MultiTier' \
+           --no-deps \
            --rm db-tasks rspec  
