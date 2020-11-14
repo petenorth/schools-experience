@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         rspecmode: [ latency, throughput ]
-        appmode: [ latency, throughput ]
+        appmode: [ --engine.Mode=latency, --engine.Mode=throughput,  --engine.MultiTier ]
         languageagnosticinlining: [false, true]
     runs-on: ubuntu-latest
     steps:
@@ -26,9 +26,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=${{matrix.appmode}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=${{matrix.appmode}}
-        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=${{matrix.appmode}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}}
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}}
         EOL
         docker-compose up -d
         WAIT_COUNT=0
