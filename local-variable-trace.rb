@@ -2,7 +2,9 @@ puts("Ruby: Insight version " + insight[:version] + " is launching")
 
 config = Truffle::Interop.hash_keys_as_members({
   roots: true,
-  rootNameFilter: "camel*"
+  sourceFilter: -> (src) {
+    return src[:name].include? "capabilities.rb"
+  }
 })
 
 insight.on("enter", -> (ctx, frame) {
