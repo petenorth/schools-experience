@@ -1,0 +1,69 @@
+FROM ubuntu:18.04
+
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
+    RAILS_LOG_TO_STDOUT=true \
+    RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
+    BUNDLE_SILENCE_ROOT_WARNING=1 \
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native 
+
+RUN apt-get update
+
+RUN apt-get install -y locales
+RUN locale -a
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+RUN locale
+
+RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+
+RUN mkdir /app
+WORKDIR /app
+
+# Install node, leaving as few artifacts as possible
+RUN apt-get update && apt-get install apt-transport-https && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get update && \
+    apt-get install -y -o Dpkg::Options::="--force-confold" --no-install-recommends yarn nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/dpkg.log
+
+# install NPM packages removign artifacts
+COPY package.json yarn.lock ./
+RUN yarn install && yarn cache clean
+
+ARG GRAALVM_VERSION=21.0.0-dev
+ARG JAVA_VERSION=java8
+#ARG GRAALVM_PKG=https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$JAVA_VERSION-linux-amd64-$GRAALVM_VERSION.tar.gz
+ARG GRAALVM_PKG=https://github.com/graalvm/graalvm-ce-dev-builds/releases/download/21.0.0-dev-20201114_0327/graalvm-ce-java8-linux-amd64-dev.tar.gz
+
+ENV LANG=en_US.UTF-8 \
+    JAVA_HOME=/opt/graalvm-ce-$JAVA_VERSION-$GRAALVM_VERSION/
+
+ADD gu-wrapper.sh /usr/local/bin/gu
+RUN set -eux \
+    && curl --fail --silent --location --retry 3 ${GRAALVM_PKG} \
+    | gunzip | tar x -C /opt/
+
+ENV PATH="/opt/graalvm-ce-java8-21.0.0-dev/lib/llvm-toolchain/bin:/opt/graalvm-ce-java8-21.0.0-dev/bin:$PATH"
+
+RUN chmod +x /usr/local/bin/gu
+
+RUN gu install ruby
+RUN $(ruby -e 'print RbConfig::CONFIG["prefix"]')/lib/truffle/post_install_hook.sh
+
+RUN which ruby
+RUN ruby --version
+
+RUN rm /opt/graalvm-ce-java8-21.0.0-dev//bin/js
+RUN rm /opt/graalvm-ce-java8-21.0.0-dev//bin/node
+RUN rm /opt/graalvm-ce-java8-21.0.0-dev//bin/npm
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --without development

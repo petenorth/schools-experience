@@ -1,0 +1,14 @@
+FROM oracle/graalvm-ce
+RUN gu install ruby
+RUN $(ruby -e 'print RbConfig::CONFIG["prefix"]')/lib/truffle/post_install_hook.sh
+
+# Install the repository RPM:
+RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+# Install PostgreSQL:
+RUN yum install -y postgresql10
+RUN yum install -y postgresql10-server
+RUN yum install -y postgresql10-contrib
+RUN yum install -y postgresql10-devel
+#RUN yum install -y pgadmin4
+RUN gem install pg

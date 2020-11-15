@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ mri, truffleruby-head ]
+        ruby: [ mri, truffleruby-head, graalvm-ce-nightly-ubuntu ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
