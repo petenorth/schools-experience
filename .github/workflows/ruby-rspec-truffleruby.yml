@@ -15,7 +15,6 @@ jobs:
       matrix:
         rspecmode: [ latency, throughput ]
         appmode: [ --engine.Mode=latency, --engine.Mode=throughput,  --engine.MultiTier ]
-        languageagnosticinlining: [false, true]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +36,7 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}} --engine.LanguageAgnosticInlining=${{matrix.languageagnosticinlining}}' \
+           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}}' \
            --no-deps \
            --rm db-tasks rspec
     - name: run specs (multitier)
