@@ -9,7 +9,7 @@ jobs:
       matrix:
         ruby: [ mri, truffleruby-head, graalvm-ce-nightly-ubuntu ]
         engine: [ --engine.Mode=latency, --engine.MultiTier ]
-        CHILDPROCESS_POSIX_SPAWN: [true, false]
+        CHILDPROCESS_POSIX_SPAWN: [1, 0]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
