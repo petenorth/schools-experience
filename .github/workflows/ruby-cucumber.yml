@@ -46,6 +46,6 @@ jobs:
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
-                       -e CHILDPROCESS_POSIX_SPAWN=${{CHILDPROCESS_POSIX_SPAWN}} \
+                       -e CHILDPROCESS_POSIX_SPAWN=${{matrix.CHILDPROCESS_POSIX_SPAWN}} \
                        --no-deps school-experience cucumber 
         echo 'completed cucumber tests'
