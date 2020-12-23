@@ -7,8 +7,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ mri, truffleruby-head, graalvm-ce-nightly-ubuntu ]
+        ruby: [ mri, truffleruby-head]
         engine: [ --engine.Mode=latency, --engine.MultiTier ]
+        regexengine: [--use-truffle-regex=false, --use-truffle-regex=true]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,7 +26,7 @@ jobs:
         RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ --use-truffle-regex=true\ ${{matrix.engine}}
+        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
         EOL
     - name: spin up
       run : |
