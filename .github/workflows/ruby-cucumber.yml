@@ -26,7 +26,7 @@ jobs:
         RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.engine}}
+        RUBYOPT_CUCUMBER=--experimental-options\ --use-truffle-regex=true\ ${{matrix.engine}}
         EOL
     - name: spin up
       run : |
