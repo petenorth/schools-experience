@@ -9,7 +9,6 @@ jobs:
       matrix:
         ruby: [ mri, truffleruby-head, graalvm-ce-nightly-ubuntu ]
         engine: [ --engine.Mode=latency, --engine.MultiTier ]
-        CHILDPROCESS_POSIX_SPAWN: [1, 0]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -46,6 +45,5 @@ jobs:
                        -e APP_URL=http://school-experience:3000 \
                        -e CUC_DRIVER=chrome \
                        -e RUBYOPT="${RUBYOPT_CUCUMBER}" \
-                       -e CHILDPROCESS_POSIX_SPAWN=${{matrix.CHILDPROCESS_POSIX_SPAWN}} \
                        --no-deps school-experience cucumber 
         echo 'completed cucumber tests'
