@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rspecmode: [ latency, throughput ]
+        rspecmode: [ --engine.Mode=latency, --engine.Mode=throughput, --engine.MultiTier ]
         appmode: [ --engine.Mode=latency, --engine.Mode=throughput,  --engine.MultiTier ]
     runs-on: ubuntu-latest
     steps:
@@ -36,13 +36,6 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options --engine.Mode=${{matrix.rspecmode}}' \
-           --no-deps \
-           --rm db-tasks rspec
-    - name: run specs (multitier)
-      continue-on-error: true
-      run: |
-        docker-compose run \
-           -e RUBYOPT='--experimental-options --engine.MultiTier' \
+           -e RUBYOPT='--experimental-options ${{matrix.rspecmode}}' \
            --no-deps \
            --rm db-tasks rspec  
