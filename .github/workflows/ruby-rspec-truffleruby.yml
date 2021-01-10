@@ -39,3 +39,30 @@ jobs:
            -e RUBYOPT='--experimental-options ${{matrix.rspecmode}}' \
            --no-deps \
            --rm db-tasks rspec  
+    - name: Checkout tools repo	
+      uses: actions/checkout@v2	
+      with:	
+        ref: graalvm	
+        repository: eregon/FlameGraph	
+        path: flame-graph	
+    - name: run a spec with profiling (flame graph)	
+      run: |	
+        docker-compose run \	
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=json' \	
+              --no-deps \	
+              --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb	
+        flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg	
+    - uses: actions/upload-artifact@v1	
+      with:	
+        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.svg	
+        path: ./cpusampling.svg	
+    - name: run a spec with profiling (histogram)	
+      run: |	
+        docker-compose run \	
+              -e RUBYOPT='--engine.Mode=${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \	
+              --no-deps \	
+              --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb	
+    - uses: actions/upload-artifact@v1	
+      with:	
+        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt	
+        path: ./cpusampling.txt
