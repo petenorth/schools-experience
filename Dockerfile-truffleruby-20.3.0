@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM flavorjones/truffleruby:20.3.0
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -7,25 +7,6 @@ ENV RAILS_ENV=production \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     BUNDLE_BUILD__SASSC=--disable-march-tune-native 
-
-RUN apt-get update
-
-RUN apt-get install -y locales
-RUN locale -a
-RUN locale-gen en_US.UTF-8
-ENV LANG=en_US.UTF-8
-RUN locale
-
-RUN  apt-get -y install tar curl make gcc libssl-dev time libxml2-dev libxslt-dev postgresql-server-dev-10 git
-
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y tzdata
-
-RUN curl -L https://github.com/oracle/truffleruby/releases/download/vm-20.3.0/truffleruby-20.3.0-linux-amd64.tar.gz | tar xz
-ENV PATH="/truffleruby-20.3.0-linux-amd64/lib/llvm-toolchain/bin:/truffleruby-20.3.0-linux-amd64/bin:$PATH"
-RUN "/truffleruby-20.3.0-linux-amd64/lib/truffle/post_install_hook.sh"
-RUN which ruby
-RUN ruby --version
 
 RUN mkdir /app
 WORKDIR /app
