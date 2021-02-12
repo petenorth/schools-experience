@@ -1,5 +1,7 @@
 FROM after-bundle-install:latest
 
+RUN ruby -v
+
 COPY . .
 
 #ENV TRUFFLERUBYOPT='--experimental-options --engine.CompilerThreads=0'
