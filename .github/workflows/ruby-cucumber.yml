@@ -9,7 +9,7 @@ jobs:
       matrix:
         ruby: [ mri, truffleruby-head]
         engine: [ --engine.Mode=latency, --engine.MultiTier ]
-        regexengine: [--compare-regex-engines=false, --compare-regex-engines=true]
+        regexengine: [--use-truffle-regex=false, --use-truffle-regex=true]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
