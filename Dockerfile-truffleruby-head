@@ -1,4 +1,4 @@
-FROM flavorjones/truffleruby:nightly
+FROM flavorjones/truffleruby:nightly-buster-slim
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
