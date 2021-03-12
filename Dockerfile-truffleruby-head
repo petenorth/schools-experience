@@ -11,7 +11,7 @@ ENV RAILS_ENV=production \
 RUN mkdir /app
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y curl gnupg2
+RUN apt-get update && apt-get install -y curl gnupg2 git
 
 # Install node, leaving as few artifacts as possible
 RUN apt-get update && apt-get install apt-transport-https && \
