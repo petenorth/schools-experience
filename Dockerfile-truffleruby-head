@@ -1,5 +1,7 @@
 FROM flavorjones/truffleruby:nightly
 
+ARG NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
 ENV RAILS_ENV=production \
     NODE_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
