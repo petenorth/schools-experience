@@ -2,6 +2,8 @@ FROM flavorjones/truffleruby:nightly
 
 ARG NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
+RUN echo "NOKOGIRI_USE_SYSTEM_LIBRARIES = $NOKOGIRI_USE_SYSTEM_LIBRARIES"
+
 ENV RAILS_ENV=production \
     NODE_ENV=production \
     RAILS_SERVE_STATIC_FILES=true \
