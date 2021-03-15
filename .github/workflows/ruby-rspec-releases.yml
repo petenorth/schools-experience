@@ -16,12 +16,11 @@ jobs:
         rspecmode: [ latency ]
         appmode: [ latency ]
         release: [ 20.1.0, 20.2.0, 20.3.0, 21.0.0, head ]
-        nokogiri_use_system_libraries: [false, true]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: build docker image
-      run: docker build --build-arg NOKOGIRI_USE_SYSTEM_LIBRARIES=${{matrix.nokogiri_use_system_libraries}} -f Dockerfile-truffleruby-${{matrix.release}} -t after-bundle-install:latest .
+      run: docker build -f Dockerfile-truffleruby-${{matrix.release}} -t after-bundle-install:latest .
     - run: docker build -f Dockerfile-after-bundle-install -t after-assets-precompile:latest .
     - run: docker build -f Dockerfile-after-assets-precompile -t school-experience:latest .
     - name: spin up
