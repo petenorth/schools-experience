@@ -1,8 +1,4 @@
-FROM flavorjones/truffleruby:nightly
-
-ARG NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-
-RUN echo "NOKOGIRI_USE_SYSTEM_LIBRARIES = $NOKOGIRI_USE_SYSTEM_LIBRARIES"
+FROM flavorjones/truffleruby:nightly-buster-slim
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -15,7 +11,7 @@ ENV RAILS_ENV=production \
 RUN mkdir /app
 WORKDIR /app
 
-#RUN apt-get update && apt-get install -y curl gnupg2 git libpq-dev
+RUN apt-get update && apt-get install -y curl gnupg2 git libpq-dev
 
 # Install node, leaving as few artifacts as possible
 RUN apt-get update && apt-get install apt-transport-https && \
