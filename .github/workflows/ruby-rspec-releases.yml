@@ -15,7 +15,7 @@ jobs:
       matrix:
         rspecmode: [ latency ]
         appmode: [ latency ]
-        release: [ 20.1.0, 20.2.0, 20.3.0, 21.0.0, head ]
+        release: [ 20.1.0, 20.2.0, 20.3.0, 21.0.0, 21.1.0, head ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
