@@ -13,8 +13,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rspecmode: [ --engine.Mode=latency, --engine.Mode=throughput, --engine.MultiTier ]
-        appmode: [ --engine.Mode=latency, --engine.Mode=throughput,  --engine.MultiTier ]
+        rspecmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
+        rspecmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
+        appmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
+        appmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,9 +27,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}}
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
         EOL
         docker-compose up -d
         WAIT_COUNT=0
@@ -41,28 +43,28 @@ jobs:
     - name: run a spec with profiling (flame graph)
       run: |
         docker-compose run \
-              -e RUBYOPT='${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=json' \
+              -e RUBYOPT='${{matrix.rspecmode}} ${{matrix.rspecmt}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
     - uses: actions/upload-artifact@v1
       with:
-        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.svg
+        name: cpusampling-APP-${{matrix.appmode}}- ${{matrix.appmt}}-RSPEC-${{matrix.rspecmode}}-${{matrix.rspecmt}}.svg
         path: ./cpusampling.svg
     - name: run a spec with profiling (histogram)	
       run: |	
         docker-compose run \
-              -e RUBYOPT='${{matrix.rspecmode}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
+              -e RUBYOPT='${{matrix.rspecmode}} ${{matrix.rspecmt}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.txt --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=histogram' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb	
     - uses: actions/upload-artifact@v1	
       with:	
-        name: cpusampling-APP-${{matrix.appmode}}-RSPEC-${{matrix.rspecmode}}.txt	
+        name: cpusampling-APP-${{matrix.appmode}}- ${{matrix.appmt}}-RSPEC-${{matrix.rspecmode}}-${{matrix.rspecmt}}.txt	
         path: ./cpusampling.txt
     - name: run specs
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options ${{matrix.rspecmode}}' \
+           -e RUBYOPT='--experimental-options ${{matrix.rspecmode}} ${{matrix.rspecmt}}' \
            --no-deps \
            --rm db-tasks rspec  
