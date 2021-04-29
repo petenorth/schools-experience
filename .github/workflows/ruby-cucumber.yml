@@ -21,12 +21,12 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}}
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}} --engine.MultiTier=false
+        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}} --engine.MultiTier=false
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary --engine.MultiTier=false
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
+        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}\ --engine.MultiTier=false
         EOL
     - name: spin up
       run : |
