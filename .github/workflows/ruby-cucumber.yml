@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [ mri, truffleruby-head]
-        engine: [ --engine.Mode=latency, --engine.Mode=throughput  ]
+        engine: [ --engine.Mode=latency, --engine.Mode=default  ]
         regexengine: [--compare-regex-engines=false, --compare-regex-engines=true]
     runs-on: ubuntu-latest
     steps:
@@ -21,12 +21,12 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}} --engine.MultiTier=false
-        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}} --engine.MultiTier=false
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary --engine.MultiTier=false
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}}
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}\ --engine.MultiTier=false
+        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
         EOL
     - name: spin up
       run : |
