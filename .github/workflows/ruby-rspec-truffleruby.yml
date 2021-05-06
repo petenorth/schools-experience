@@ -15,8 +15,10 @@ jobs:
       matrix:
         rspecmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
         rspecmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
+        rspeccomp: [ --engine.Compilation=false, --engine.Compilation=true ]
         appmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
         appmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
+        appcomp: [ --engine.Compilation=false, --engine.Compilation=true ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -27,9 +29,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
         EOL
         docker-compose up -d
         WAIT_COUNT=0
@@ -43,7 +45,7 @@ jobs:
     - name: run a spec with profiling (flame graph)
       run: |
         docker-compose run \
-              -e RUBYOPT='${{matrix.rspecmode}} ${{matrix.rspecmt}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=json' \
+              -e RUBYOPT='${{matrix.rspecmode}} ${{matrix.rspecmt}} ${{matrix.rspeccomp}} --experimental-options --cpusampler --cpusampler.OutputFile=/ci_build/cpusampling.json --cpusampler.SampleInternal=true --cpusampler.Mode=roots --cpusampler.Output=json' \
               --no-deps \
               --rm db-tasks rspec spec/controllers/schools/placement_dates/subject_selections_controller_spec.rb
         flame-graph/stackcollapse-graalvm.rb cpusampling.json | flame-graph/flamegraph.pl > cpusampling.svg
