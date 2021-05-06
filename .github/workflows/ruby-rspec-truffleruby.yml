@@ -14,11 +14,11 @@ jobs:
       fail-fast: false
       matrix:
         rspecmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
-        rspecmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
         rspeccomp: [ --engine.Compilation=false, --engine.Compilation=true ]
+        rspecmode: [ --engine.Mode=latency ]
         appmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
-        appmode: [ --engine.Mode=latency, --engine.Mode=throughput ]
         appcomp: [ --engine.Compilation=false, --engine.Compilation=true ]
+        appmode: [ --engine.Mode=latency ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
