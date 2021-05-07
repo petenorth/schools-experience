@@ -15,10 +15,10 @@ jobs:
       matrix:
         rspecmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
         rspeccomp: [ --engine.Compilation=false, --engine.Compilation=true ]
-        rspecmode: [ --engine.Mode=latency ]
+        #rspecmode: [ --engine.Mode=latency ]
         appmt: [ --engine.MultiTier=true, --engine.MultiTier=false ]
         appcomp: [ --engine.Compilation=false, --engine.Compilation=true ]
-        appmode: [ --engine.Mode=latency ]
+        #appmode: [ --engine.Mode=latency ]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -29,9 +29,9 @@ jobs:
     - name: spin up
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
-        RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.appmode}} ${{matrix.appmt}} ${{matrix.appcomp}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options --engine.Mode=latency ${{matrix.appmt}} ${{matrix.appcomp}}
+        RUBYOPT_DELAYED_JOBS=--experimental-options --engine.Mode=latency ${{matrix.appmt}} ${{matrix.appcomp}}
+        RUBYOPT_DB_TASKS=--experimental-options --engine.Mode=latency ${{matrix.appmt}} ${{matrix.appcomp}}
         EOL
         docker-compose up -d
         WAIT_COUNT=0
@@ -67,6 +67,6 @@ jobs:
       continue-on-error: true
       run: |
         docker-compose run \
-           -e RUBYOPT='--experimental-options ${{matrix.rspecmode}} ${{matrix.rspecmt}}' \
+           -e RUBYOPT='--experimental-options --engine.Mode=latency ${{matrix.rspeccomp}} ${{matrix.rspecmt}}' \
            --no-deps \
            --rm db-tasks rspec  
