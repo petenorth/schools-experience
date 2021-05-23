@@ -23,7 +23,7 @@ jobs:
         cat > .env << EOL
         RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}} 
         RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}}
-        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}} --vm.XX:+PrintGCSummary
+        RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}}
         EOL
         cat > cucumber.env << EOL
         RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
