@@ -6,7 +6,8 @@ ENV RAILS_ENV=production \
     RAILS_LOG_TO_STDOUT=true \
     RACK_TIMEOUT_SERVICE_TIMEOUT=60 \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
-    BUNDLE_BUILD__SASSC=--disable-march-tune-native 
+    BUNDLE_BUILD__SASSC=--disable-march-tune-native \
+    RUBY_OPT=--engine.MultiTier=false
 
 RUN mkdir /app
 WORKDIR /app
