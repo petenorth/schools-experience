@@ -29,7 +29,7 @@ jobs:
         RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
         EOL
     - name: pull images
-        docker-compose -f docker-compose.yml -f docker-compose-chrome.yml pull postgres redis selenium-chrome
+        run: docker-compose -f docker-compose.yml -f docker-compose-chrome.yml pull postgres redis selenium-chrome
     - name: spin up
       run : |
         docker-compose -f docker-compose.yml -f docker-compose-chrome.yml config
