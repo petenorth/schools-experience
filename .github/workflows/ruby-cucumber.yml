@@ -21,7 +21,7 @@ jobs:
       if: matrix.ruby == 'truffleruby-head'
       run : |
         cat > .env << EOL
-        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}}
+        RUBYOPT_SCHOOL_EXPERIENCE=--experimental-options ${{matrix.engine}} ${{matrix.regexengine}}
         RUBYOPT_DELAYED_JOBS=--experimental-options ${{matrix.engine}}
         RUBYOPT_DB_TASKS=--experimental-options ${{matrix.engine}}
         EOL
