@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby: [ mri, truffleruby-head]
-        engine: [ --engine.Mode=latency, --engine.Mode=default ]
+        engine: [ --engine.Mode=latency, --engine.Mode=default, --engine.Compilation=false ]
         regexengine: [--use-truffle-regex=false, --use-truffle-regex=true]
     runs-on: ubuntu-latest
     steps:
