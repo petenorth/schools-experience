@@ -7,9 +7,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [ truffleruby-head]
-        engine: [ --engine.Mode=latency, --engine.Mode=default, --engine.Compilation=false ]
-        regexengine: [--use-truffle-regex=false]
+        ruby: [ truffleruby-head ]
+        engine: [ --engine.Mode=latency ]
+        regexengine: [--use-truffle-regex=false, --use-truffle-regex=true]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
         RUBYOPT_DB_TASKS=--experimental-options --engine.Compilation=false
         EOL
         cat > cucumber.env << EOL
-        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ --engine.Compilation=false
+        RUBYOPT_CUCUMBER=--experimental-options\ ${{matrix.regexengine}}\ ${{matrix.engine}}
         EOL
     - run: docker-compose -f docker-compose.yml -f docker-compose-chrome.yml pull postgres redis selenium-chrome
     - name: spin up
